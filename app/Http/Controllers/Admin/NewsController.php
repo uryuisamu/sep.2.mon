@@ -70,10 +70,14 @@ class NewsController extends Controller{
         $news->image_path = null;
         unset($news_form['remove']);
       }
-      
+      /*上記のif文に記述されている 'image' と 'remove'　についてのunsetはこの下に移せるのか？*/
       unset($news_form['_token']);
-     
       $news->fill($news_form)->save();
+      
+      $history = new History;
+      $history->news_id = $news->id;
+      $history->edited_at = Carbon::now();
+      $history->save();
       
       return redirect('admin/news');
     }
